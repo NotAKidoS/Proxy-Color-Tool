@@ -42,7 +42,7 @@ if CLIENT then
 	-- language.Add("tool.proxycolor.0", "Apply the colors")
 	language.Add("tool.proxycolor.reload", "Reset color scheme")-----------
 	language.Add("tool.proxycolor.right", "Copy color scheme") ---------- |
-	language.Add("tool.proxycolor.left", "Select AND THEN color object")--------- | |
+	language.Add("tool.proxycolor.left", "Select object")--------- | |
 	-- language.Add("tool.proxycolor.left_1", "Apply color scheme")   --   | | |
 																 --   | | |
 end																 --   | | |
@@ -50,7 +50,7 @@ end																 --   | | |
 TOOL.Information = {											 --	  | | |
 	{ name = "left", stage = 0}, ------------------------------------------------ | |
 	-- { name = "left_1", stage = 1 }, ------------------------------------------------ | |
-	-- { name = "right" }, ------------------------------------------------  |
+	{ name = "right" }, ------------------------------------------------  |
 	{ name = "reload" } --------------------------------------------------
 } -- This is used to display the buttons/keys the tool uses in the top left
 
@@ -60,27 +60,25 @@ TOOL.Information = {											 --	  | | |
 function TOOL:LeftClick( trace )
 
 	local ent = trace.Entity
-	if ( IsValid( ent.AttachedEntity ) ) then ent = ent.AttachedEntity end // I honestly dont know what this means, it was a part of the normal color tool
+	if ( IsValid( ent.AttachedEntity ) ) then ent = ent.AttachedEntity end --// I honestly dont know what this means, it was a part of the normal color tool
 	
-	// if the entity is a Simfphys wheel, set the fake Ghost wheel as the selected entity (the ghostwheel is the visual one)
+	--// if the entity is a Simfphys wheel, set the fake Ghost wheel as the selected entity (the ghostwheel is the visual one)
 	if ent:GetClass() == "gmod_sent_vehicle_fphysics_wheel" then 
-		ent = ent:GetChildren()[2] // This will color Simfphys wheels now, even if they arent saved by Simfphys icle Dupe :<
+		ent = ent:GetChildren()[2] --// This will color Simfphys wheels now, even if they arent saved by Simfphys icle Dupe :<
 	end
 
 	if IsValid( ent ) then -- The entity is valid and isn't worldspawn
 	
 		if self:GetWeapon():GetNWEntity("CurEntity") != ent then
 			self:GetWeapon():SetNWEntity("CurEntity",ent)
-
 			self:GetWeapon():EmitSound( "garrysmod/content_downloaded.wav", 75, 100, 1, CHAN_WEAPON)
-			-- Entity(1):PrintMessage(HUD_PRINTTALK, "[Proxy Color] Rebuilt panel, check your menu!")
-
+			if CLIENT then
+				Entity(1):PrintMessage(HUD_PRINTTALK, "[Proxy Color] Rebuilt panel, check your menu!")
+			end
 			return
 		end
 		
-		
 		if ( CLIENT ) then return true end
-		
 		
 		local ColorTable = {}
 
@@ -91,8 +89,7 @@ function TOOL:LeftClick( trace )
 			table.insert(ColorTable, i, Color(cs_r,cs_g,cs_b) )
 		end
 		
-		SetProxyColor( nil, ent, ColorTable )
-
+		ent:SetProxyColor( ColorTable )
 
 		return true
 		
@@ -114,26 +111,16 @@ function TOOL:RightClick( trace )
 
 	if IsValid( ent ) then -- The entity is valid and isn't worldspawn
 		
-		-- if CLIENT then
-			-- print(self.ColorSlot1)
-		-- end
-		-- checkthing(ent) 
+		if !ent.GetProxyColor then return end
 		
-		-- if ( ent.ColorSlot1 ) then 
-			-- local cs = ent:ColorSlot1() or Color(255,255,255)
-			-- self:GetOwner():ConCommand( "cs1_r " .. cs.r*255 )
-			-- self:GetOwner():ConCommand( "cs1_g " .. cs.g*255 )
-			-- self:GetOwner():ConCommand( "cs1_b " .. cs.b*255 )
-			-- print(cs)
-		-- end
-			
-		-- if ( ent.ColorSlot2 ) then 
-			-- local cs = ent:GetSecondaryProxy() or Color(255,255,255)
-			-- self:GetOwner():ConCommand( "cs2_r " .. cs.r*255 )
-			-- self:GetOwner():ConCommand( "cs2_g " .. cs.g*255 )
-			-- self:GetOwner():ConCommand( "cs2_b " .. cs.b*255 )
-		-- end
-
+		local CT = ent:GetProxyColor()
+		
+		for i=1,6 do
+			if CT[i] == nil then CT[i] = Vector(1,1,1) end
+			self:GetOwner():ConCommand( "proxycolor_cs"..i.."_r " .. CT[i].r*255 )
+			self:GetOwner():ConCommand( "proxycolor_cs"..i.."_g " .. CT[i].g*255 )
+			self:GetOwner():ConCommand( "proxycolor_cs"..i.."_b " .. CT[i].b*255 )
+		end
 
 		return true
 	
@@ -159,7 +146,7 @@ function TOOL:Reload( trace )
 			table.insert(ColorTable, i, Color(255,255,255) )
 		end
 		
-		SetProxyColor( nil, ent, ColorTable )
+		ent:SetProxyColor( ColorTable )
 
 		return true
 	
