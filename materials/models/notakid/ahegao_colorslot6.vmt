@@ -1,0 +1,20 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "models/notakid/ahegao"
+	"$bumpmap" "models/notakid/flat_nrm"
+	"$phong" 1
+	"$phongexponent" 2
+	"$phongboost"	3
+	"$phongfresnelranges" "[0.4 1 1]"
+	"$rimlight" 1
+	"$rimlightboost" 1
+	$nocull 1
+	"$phongfix" "{10 10 10}"
+	Proxies {
+    		ColorSlot6{
+			name "Ahegao Colorslot 6"
+       			resultVar $color2
+           		}
+	}
+}
+
