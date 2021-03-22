@@ -1,8 +1,17 @@
 --[[
-	this code is prolly shit i know
+	this code is prolly shit I know
 	if you want to help improve it then contribute on the github repo!
 ]]
-
+if SERVER then
+	AddCSLuaFile("matproxy/matproxycolors.lua")
+	AddCSLuaFile("weapons/gmod_tool/stools/proxycolor.lua")
+	print("[Proxy Color] Added files to CLIENT.")
+end
+if CLIENT then
+	include("matproxy/matproxycolors.lua")
+	--include("weapons/gmod_tool/stools/proxycolor.lua")
+	print("[Proxy Color] started.")
+end
 ProxyColor = true
 
 local Entity = FindMetaTable( "Entity" )
@@ -17,7 +26,7 @@ end
 function Entity:SetProxyColor(ColorTable)
 	if !IsValid(self) or !ColorTable then return end
 	
-	for i=1,6 do
+	for i=1,7 do
 		if IsColor(ColorTable[i]) then ColorTable[i] = ColorTable[i]:ToVector() end
 	end
 
@@ -25,7 +34,7 @@ function Entity:SetProxyColor(ColorTable)
 
 	--Store dupe data whatnot
 	if ( CLIENT ) then
-		net.Start("NAKProxyColorSync")--network to player (unsure if this will work yet, maybe used for clientside derma menu preview)
+		net.Start("NAKProxyColorSync") --network to player (unsure if this will work yet, maybe used for clientside derma menu preview)
 		net.WriteEntity(self)
 			net.WriteTable(ColorTable)
 		net.Send(LocalPlayer())
@@ -35,7 +44,7 @@ function Entity:SetProxyColor(ColorTable)
 			print("[Proxy Color] Attempted to network a server/clientside ONLY entity, refusing to send. https://bit.ly/2OY7Nyj")
 			print("[Proxy Color] If you believe this is a mistake or useless check, please contact me on steam. -NotAKid")
 		else
-			net.Start("NAKProxyColorSync")--network to players
+			net.Start("NAKProxyColorSync") --network to players
 			net.WriteFloat(self:EntIndex())
 			net.WriteTable(ColorTable)
 			net.Broadcast()
@@ -59,7 +68,7 @@ else
 		local CT = net.ReadTable()
 		local TimerName = "PrxyClr_"..entID
 
-		--//Check if the entity exists a few times
+		--Check if the entity exists a few times
 		timer.Create(TimerName, 0.01, 12, function(a,b)
 			local self = ents.GetByIndex( entID )
 			if IsValid(self) then 
@@ -71,9 +80,10 @@ else
 				if CT[4] != nil then self.ColorSlot4 = CT[4] end
 				if CT[5] != nil then self.ColorSlot5 = CT[5] end
 				if CT[6] != nil then self.ColorSlot6 = CT[6] end
+				if CT[7] != nil then self.ColorSlot7 = CT[7] end
 			end
-			--//if the players ping is too high, wait a bit and try again (less timer spam)
-			--//I tested with net_fakeloss and net_fakelag, no value ever triggered this. Unsure if this is needed but just in case.
+			--if the players ping is too high, wait a bit and try again (less timer spam)
+			--I tested with net_fakeloss and net_fakelag, no value ever triggered this. Unsure if this is needed but just in case.
 			if timer.RepsLeft(TimerName) == 0 then
 				print("[Proxy Color] Error receiving entity from server, too high of ping or entity does not exist! Retrying in 3 seconds...")
 				timer.Simple( 3, function() 
@@ -87,6 +97,7 @@ else
 							if CT[4] != nil then self.ColorSlot4 = CT[4] end
 							if CT[5] != nil then self.ColorSlot5 = CT[5] end
 							if CT[6] != nil then self.ColorSlot6 = CT[6] end
+							if CT[7] != nil then self.ColorSlot7 = CT[7] end
 							print("[Proxy Color] Entity received, proxy colors have been set!")
 						else
 							print("[Proxy Color] Entity received, existing proxy colors found. Ignoring original colors...")
