@@ -34,10 +34,15 @@ function Entity:SetProxyColor(ColorTable)
 
 	--Store dupe data whatnot
 	if ( CLIENT ) then
-		net.Start("NAKProxyColorSync") --network to player (unsure if this will work yet, maybe used for clientside derma menu preview)
-		net.WriteEntity(self)
-			net.WriteTable(ColorTable)
-		net.Send(LocalPlayer())
+		if IsValid(self) then
+			if ColorTable[1] != nil then self.ColorSlot1 = ColorTable[1] end
+			if ColorTable[2] != nil then self.ColorSlot2 = ColorTable[2] end
+			if ColorTable[3] != nil then self.ColorSlot3 = ColorTable[3] end
+			if ColorTable[4] != nil then self.ColorSlot4 = ColorTable[4] end
+			if ColorTable[5] != nil then self.ColorSlot5 = ColorTable[5] end
+			if ColorTable[6] != nil then self.ColorSlot6 = ColorTable[6] end
+			if ColorTable[7] != nil then self.ColorSlot7 = ColorTable[7] end
+		end
 	else
 		local entID = self:EntIndex()
 		if entID == -1 then
