@@ -6,5 +6,8 @@ Since this utilizes material proxies it *may* cause some _*FPS* drop_ on the *CL
 For more information about [material proxies](https://developer.valvesoftware.com/wiki/Proxies) check the valve documentation or even [Ellie](https://steamcommunity.com/id/ellie_williams/myworkshopfiles/?section=guides&p=1&numperpage=30) guides.
 
 
-## WIki
+## Wiki
 Please check the [wiki](../../wiki) to learn about how to use and contribute.
+
+## Showcase
+*insert video here*
