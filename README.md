@@ -11,3 +11,6 @@ Please check the [wiki](../../wiki) to learn about how to use and contribute.
 
 ## Showcase
 *insert video here*
+
+## Contributions
+@
