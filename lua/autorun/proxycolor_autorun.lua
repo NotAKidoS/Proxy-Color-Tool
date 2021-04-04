@@ -2,6 +2,8 @@
 	this code is prolly shit I know
 	if you want to help improve it then contribute on the github repo!
 ]]
+ProxyColor = istable( ProxyColor ) and ProxyColor or {}
+
 if SERVER then
 	AddCSLuaFile("matproxy/matproxycolors.lua")
 	AddCSLuaFile("weapons/gmod_tool/stools/proxycolor.lua")
@@ -12,7 +14,6 @@ if CLIENT then
 	--include("weapons/gmod_tool/stools/proxycolor.lua")
 	print("[Proxy Color] started.")
 end
-ProxyColor = true
 
 local Entity = FindMetaTable( "Entity" )
 
@@ -30,7 +31,7 @@ function Entity:SetProxyColor(ColorTable)
 		if IsColor(ColorTable[i]) then ColorTable[i] = ColorTable[i]:ToVector() end
 	end
 
-	self.ColorTable = ColorTable --store colortable on server
+	self.ColorTable = ColorTable --store colortable on entity (probably needs to be reworked)
 
 	--Store dupe data whatnot
 	if ( CLIENT ) then
@@ -59,7 +60,7 @@ function Entity:SetProxyColor(ColorTable)
 end
 
 --Function to set color table for dupes
-function DupeSetProxyColor( ply, ent, CT )
+local function DupeSetProxyColor( ply, ent, CT )
 	ent:SetProxyColor( CT )
 end
 duplicator.RegisterEntityModifier( "proxycolor", DupeSetProxyColor )
@@ -114,4 +115,21 @@ else
 			end
 		end )
 	end)
+end
+
+-- useful functions
+-- spawnonly mainly means it wont recolor if it already has a color (aka when duplicated)
+function ProxyColor.RandFromTable( ent, ctable, spawnonly )
+	if spawnonly and ent.ColorTable then return end
+	ent:SetProxyColor(ctable[math.random(1, #ctable)])
+end
+function ProxyColor.Random( ent, spawnonly )
+	if spawnonly and ent.ColorTable then return end
+	local ColorTable = {}
+	for i=1,7 do
+		local vect = VectorRand( 0, 255 )
+		vect:Normalize()
+		table.insert(ColorTable, i, vect:ToColor() )
+	end
+	ent:SetProxyColor( ColorTable )
 end
