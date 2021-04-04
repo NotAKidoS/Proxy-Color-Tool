@@ -1,7 +1,7 @@
 --Tool by NotAKid, it is probably shit soz
 
-TOOL.Category		= "Render"
-TOOL.Name			= "Proxy Color"
+TOOL.Category = "Render"
+TOOL.Name = "Proxy Color"
 
 --add each material proxy we support
 TOOL.ClientConVar[ "cs1_r" ] = 255
@@ -18,10 +18,13 @@ TOOL.ClientConVar[ "cs4_g" ] = 255
 TOOL.ClientConVar[ "cs4_b" ] = 255
 TOOL.ClientConVar[ "cs5_r" ] = 255
 TOOL.ClientConVar[ "cs5_g" ] = 255
-TOOL.ClientConVar[ "cs5_b" ] = 255	
+TOOL.ClientConVar[ "cs5_b" ] = 255
 TOOL.ClientConVar[ "cs6_r" ] = 255
 TOOL.ClientConVar[ "cs6_g" ] = 255
 TOOL.ClientConVar[ "cs6_b" ] = 255
+TOOL.ClientConVar[ "cs7_r" ] = 255
+TOOL.ClientConVar[ "cs7_g" ] = 255
+TOOL.ClientConVar[ "cs7_b" ] = 255
 TOOL.CurEntity = nil
 
 if CLIENT then
@@ -53,7 +56,7 @@ function TOOL:LeftClick( trace )
 	--The entity is valid and isn't worldspawn
 	if IsValid( ent ) then 
 		
-		if self:GetWeapon():GetNWEntity("CurEntity") != ent then--the select then apply code
+		if self:GetWeapon():GetNWEntity("CurEntity") != ent then --the select then apply code
 			self:GetWeapon():SetNWEntity("CurEntity",ent)
 			self:GetWeapon():EmitSound( "garrysmod/content_downloaded.wav", 75, 100, 1, CHAN_WEAPON)
 			if CLIENT then
@@ -64,7 +67,7 @@ function TOOL:LeftClick( trace )
 		if ( CLIENT ) then return true end
 		
 		local ColorTable = {}
-		for i=1,6 do
+		for i=1,7 do
 			local cs_r		= self:GetClientNumber( "cs"..i.."_r", 0 )
 			local cs_g	= self:GetClientNumber( "cs"..i.."_g", 0 )
 			local cs_b	= self:GetClientNumber( "cs"..i.."_b", 0 )
@@ -89,7 +92,7 @@ function TOOL:RightClick( trace )
 		local CT = ent:GetProxyColor()
 		if !CT then return end
 
-		for i=1,6 do
+		for i=1,7 do
 			if CT[i] == nil then CT[i] = Vector(1,1,1) end
 			self:GetOwner():ConCommand( "proxycolor_cs"..i.."_r " .. CT[i].r*255 )
 			self:GetOwner():ConCommand( "proxycolor_cs"..i.."_g " .. CT[i].g*255 )
@@ -104,7 +107,7 @@ function TOOL:Reload( trace )
 	local ent = trace.Entity
 	if ( IsValid( ent.AttachedEntity ) ) then ent = ent.AttachedEntity end
 
-	if ent:GetClass() == "gmod_sent_vehicle_fphysics_wheel" then // resets simfphys vehicle wheel colors
+	if ent:GetClass() == "gmod_sent_vehicle_fphysics_wheel" then --resets simfphys vehicle wheel colors
 		ent = ent:GetChildren()[2]
 	end
 	
@@ -113,7 +116,7 @@ function TOOL:Reload( trace )
 	if IsValid( ent ) then
 		--reset everything to white
 		local ColorTable = {}
-		for i=1,6 do
+		for i=1,7 do
 			table.insert(ColorTable, i, Color(255,255,255) )
 		end
 
@@ -165,8 +168,8 @@ local function HackyListGenThingIdk(i,Selected,CPanel,name)
 	collapse:SetExpanded(true)
 end
 
-local ConVarsDefault = TOOL:BuildConVarList() // used to get the saved presets
-function TOOL.BuildCPanel( CPanel, Selected ) // the control area of the tool, gonna have to work on it to make multiple proxies easier to use
+local ConVarsDefault = TOOL:BuildConVarList() -- used to get the saved presets
+function TOOL.BuildCPanel( CPanel, Selected ) -- the control area of the tool, gonna have to work on it to make multiple proxies easier to use
 	CPanel:AddControl( "Header", { Description = "#tool.proxycolor.desc" } )
 	CPanel:AddControl( "ComboBox", { MenuButton = 1, Folder = "proxycolor", Options = { [ "#preset.default" ] = ConVarsDefault }, CVars = table.GetKeys( ConVarsDefault ) } )
 
@@ -179,4 +182,5 @@ function TOOL.BuildCPanel( CPanel, Selected ) // the control area of the tool, g
 	if ( Selected.ColorSlot4 ) then HackyListGenThingIdk(4,Selected,CPanel,Selected.ColorSlot4Name) end
 	if ( Selected.ColorSlot5 ) then HackyListGenThingIdk(5,Selected,CPanel,Selected.ColorSlot5Name) end
 	if ( Selected.ColorSlot6 ) then HackyListGenThingIdk(6,Selected,CPanel,Selected.ColorSlot6Name) end
+	if ( Selected.ColorSlot7 ) then HackyListGenThingIdk(7,Selected,CPanel,Selected.ColorSlot7Name) end
 end
