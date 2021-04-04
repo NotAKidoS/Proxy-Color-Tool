@@ -13,4 +13,6 @@ Please check the [wiki](../../wiki) to learn about how to use and contribute.
 *insert video here*
 
 ## Contributions
-@
+@LoveRenamon - Cleanup of code, start of wiki
+@SGM - Ideas and pitched features
+@NotAKidOnSteam - Original addon author
