@@ -13,6 +13,6 @@ Please check the [wiki](../../wiki) to learn about how to use and contribute.
 *insert video here*
 
 ## Contributions
-@LoveRenamon - Cleanup of code, start of wiki
-@SGM - Ideas and pitched features
-@NotAKidOnSteam - Original addon author
+[LoveRenamon](https://steamcommunity.com/id/Debiddo/) - Cleanup of code, start of wiki  
+[SGM](https://steamcommunity.com/id/officialsgm/) - Ideas and pitched features  
+[NotAKid](https://steamcommunity.com/id/NotTheKidYouAreLookingFor/) - Original addon author  
